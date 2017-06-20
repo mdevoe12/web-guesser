@@ -7,7 +7,9 @@ get '/' do
   guess = params["guess"] || "x"
   message = check_guess(guess)
   erb :index, :locals => {:number  => SECRET_NUMBER,
-                          :message => message}
+                          :message => message,
+                          :color   => set_background(guess)
+                         }
 end
 
 
@@ -23,6 +25,20 @@ def check_guess(guess)
   end
 end
 
+def set_background(guess)
+  if guess == "x"
+    "#c8c8c8"
+  elsif guess.to_i == SECRET_NUMBER
+    green_background
+  elsif (guess.to_i > (SECRET_NUMBER + 5)) || (guess.to_i < (SECRET_NUMBER - 5))
+    red_background
+  elsif (guess.to_i > (SECRET_NUMBER)) || (guess.to_i < (SECRET_NUMBER))
+    light_red_background
+  end
+end
+
+private
+
 def high_message(guess)
   if guess.to_i > (SECRET_NUMBER + 5)
     "Way too high! Guess again."
@@ -37,4 +53,16 @@ def low_message(guess)
   else
     "Too low. Guess again."
   end
+end
+
+def red_background
+  "red"
+end
+
+def light_red_background
+  "#c86464"
+end
+
+def green_background
+  "green"
 end
